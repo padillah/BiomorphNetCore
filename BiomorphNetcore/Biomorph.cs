@@ -30,7 +30,7 @@ namespace BiomorphNetcore
             if (phenotype == null)
             {
                 // Decode the genes as per Dawkins' rules.
-                int[] dx = new int[BiomorphFactory.GENE_COUNT - 1];
+                int[] dx = new int[DawsonFactory.GENE_COUNT - 1];
                 dx[3] = genes[0];
                 dx[4] = genes[1];
                 dx[5] = genes[2];
@@ -42,7 +42,7 @@ namespace BiomorphNetcore
                 dx[2] = 0;
                 dx[6] = 0;
 
-                int[] dy = new int[BiomorphFactory.GENE_COUNT - 1];
+                int[] dy = new int[DawsonFactory.GENE_COUNT - 1];
                 dy[2] = genes[3];
                 dy[3] = genes[4];
                 dy[4] = genes[5];
@@ -63,7 +63,7 @@ namespace BiomorphNetcore
         */
         public int getLengthPhenotype()
         {
-            return genes[BiomorphFactory.LENGTH_GENE_INDEX];
+            return genes[DawsonFactory.LENGTH_GENE_INDEX];
         }
 
         internal Biomorph Clone()

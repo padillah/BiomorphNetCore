@@ -42,7 +42,7 @@ namespace BiomorphNetcore
             backgroundImage.Dispose();
 
             // Create a new bitmap with the new size
-            backgroundImage = new Bitmap(this.Width-1, this.Height);
+            backgroundImage = new Bitmap(this.Width - 1, this.Height);
 
             int x = this.Width / 2;
             int y = this.Height / 2;
@@ -60,6 +60,14 @@ namespace BiomorphNetcore
             drawGraphics.DrawLine(forePen, 0, this.Width - 1, this.Width - 1, this.Height - 1);
             drawGraphics.DrawLine(forePen, this.Width - 1, this.Height - 1, 0, this.Height - 1);
             drawGraphics.DrawLine(forePen, 0, this.Height - 1, 0, 0);
+
+            var genes = biomorph.GetGenotype();
+            var stringSize = drawGraphics.MeasureString("W", DefaultFont);
+
+            for (int i = 0; i < genes.Length; i++)
+            {
+                drawGraphics.DrawString(genes[i].ToString(), DefaultFont, Brushes.Black, new Point(0, (i * 11)  ));
+            }
 
             base.BackgroundImage = backgroundImage;
 
