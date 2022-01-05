@@ -46,11 +46,12 @@ namespace WeaselProgram
             FindPhrase(validatePhrase);
             runTime.Stop();
             labelRunTime.Text = runTime.Elapsed.ToString();
+            textBoxPhrase.Enabled = true;
         }
 
         private void FindPhrase(string weaselPhrase)
         {
-            string nextGuess;
+            Phrase nextGuess;
             List<Phrase> attemptPhrases = new();
 
             // Initialize 100 random strings
@@ -65,17 +66,17 @@ namespace WeaselProgram
                 nextGuess = FuzzyMatch(attemptPhrases, weaselPhrase);
 
                 // Add the match to the listBox
-                listBoxResults.Items.Add(nextGuess);
+                listBoxResults.Items.Add(nextGuess.ToString());
 
                 attemptPhrases.Clear();
 
                 // New list of 100 strings
                 for (int i = 0; i < 100; i++)
                 {
-                    attemptPhrases.Add(new Phrase(nextGuess));
+                    attemptPhrases.Add(new Phrase(nextGuess.PhraseString));
                 }
 
-            } while (nextGuess != weaselPhrase);
+            } while (nextGuess.PhraseString != weaselPhrase);
 
         }
 
@@ -100,7 +101,7 @@ namespace WeaselProgram
             return newList;
         }
 
-        private string FuzzyMatch(List<Phrase> attemptPhrases, string weaselPhrase)
+        private Phrase FuzzyMatch(List<Phrase> attemptPhrases, string weaselPhrase)
         {
             Phrase bestMatch;
 
@@ -123,7 +124,7 @@ namespace WeaselProgram
                 { bestMatch = currentPhrase; }
             }
 
-            return bestMatch.PhraseString;
+            return bestMatch;
         }
 
         private void MutatePhraseList(List<Phrase> attemptPhrases)
@@ -170,6 +171,11 @@ namespace WeaselProgram
         public Phrase(string phrase)
         {
             charArray = phrase.ToCharArray();
+        }
+
+        public override string ToString()
+        {
+            return new string ( (new string(charArray))+" | "+ Score);
         }
     }
 }

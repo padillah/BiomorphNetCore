@@ -32,10 +32,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxPhrase = new System.Windows.Forms.TextBox();
             this.buttonStart = new System.Windows.Forms.Button();
-            this.listBoxResults = new System.Windows.Forms.ListBox();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label2 = new System.Windows.Forms.Label();
             this.labelRunTime = new System.Windows.Forms.Label();
+            this.listBoxResults = new System.Windows.Forms.ListBox();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -95,34 +95,6 @@
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
-            // listBoxResults
-            // 
-            this.listBoxResults.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxResults.FormattingEnabled = true;
-            this.listBoxResults.ItemHeight = 15;
-            this.listBoxResults.Location = new System.Drawing.Point(0, 0);
-            this.listBoxResults.Name = "listBoxResults";
-            this.listBoxResults.Size = new System.Drawing.Size(614, 556);
-            this.listBoxResults.TabIndex = 4;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Cursor = System.Windows.Forms.Cursors.VSplit;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.tableLayoutPanel1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.listBoxResults);
-            this.splitContainer1.Size = new System.Drawing.Size(927, 556);
-            this.splitContainer1.SplitterDistance = 309;
-            this.splitContainer1.TabIndex = 5;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -144,6 +116,37 @@
             this.labelRunTime.TabIndex = 5;
             this.labelRunTime.Text = "label3";
             this.labelRunTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // listBoxResults
+            // 
+            this.listBoxResults.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxResults.FormattingEnabled = true;
+            this.listBoxResults.ItemHeight = 15;
+            this.listBoxResults.Location = new System.Drawing.Point(0, 0);
+            this.listBoxResults.Name = "listBoxResults";
+            this.listBoxResults.Size = new System.Drawing.Size(612, 556);
+            this.listBoxResults.TabIndex = 4;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Cursor = System.Windows.Forms.Cursors.VSplit;
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.tableLayoutPanel1);
+            this.splitContainer1.Panel1.Cursor = System.Windows.Forms.Cursors.Arrow;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.listBoxResults);
+            this.splitContainer1.Panel2.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.splitContainer1.Size = new System.Drawing.Size(927, 556);
+            this.splitContainer1.SplitterDistance = 309;
+            this.splitContainer1.SplitterWidth = 6;
+            this.splitContainer1.TabIndex = 5;
             // 
             // Form1
             // 
