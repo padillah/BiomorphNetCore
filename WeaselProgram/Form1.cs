@@ -137,6 +137,8 @@ namespace WeaselProgram
 
         private void MutatePhraseList(List<Phrase> attemptPhrases)
         {
+            bool progress;
+            char newChar;
             Random random = new();
 
             foreach (var currentPhrase in attemptPhrases)
@@ -148,7 +150,23 @@ namespace WeaselProgram
                 {
                     if (random.Next(100) < 5)
                     {
-                        char newChar = GetValidChar();
+                        progress = false;
+                        do
+                        {
+                            newChar = GetValidChar();
+                            if (checkBoxNoDupes.Checked)
+                            {
+                                if (newChar != currentPhrase.CharArray[currentLetter])
+                                {
+                                    progress = true;
+                                }
+                            }
+                            else
+                            {
+                                progress = true;
+                            }
+                        } while (!progress);
+
                         currentPhrase.CharArray[currentLetter] = newChar;
                     }
                 }
@@ -170,13 +188,20 @@ namespace WeaselProgram
                     newChar = 32;
                     done = true;
                 }
-
+                else
+                {
                 done = newChar <= 90 || newChar >= 97;
+                }
 
             } while (!done);
 
             return (char)newChar;
         }
+
+        private void toolStripMenuItemCopy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(listBoxResults.SelectedItem.ToString());
+    }
     }
 
     internal class Phrase
