@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -54,6 +54,7 @@ namespace WeaselProgram
             runTime.Stop();
             labelRunTime.Text = runTime.Elapsed.ToString();
             textBoxPhrase.Enabled = true;
+            buttonStart.Enabled = true;
         }
 
         private void FindPhrase(string weaselPhrase)
