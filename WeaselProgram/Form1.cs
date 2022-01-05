@@ -26,6 +26,8 @@ namespace WeaselProgram
                 return;
             }
 
+            listBoxResults.Items.Clear();
+
             runTime = Stopwatch.StartNew();
             textBoxPhrase.Enabled = false;
             buttonStart.Enabled = false;
@@ -49,7 +51,6 @@ namespace WeaselProgram
                 }
             }
 
-            listBoxResults.Items.Clear();
             FindPhrase(validatePhrase);
             runTime.Stop();
             labelRunTime.Text = runTime.Elapsed.ToString();
