@@ -30,15 +30,22 @@ namespace WeaselProgram
             textBoxPhrase.Enabled = false;
             buttonStart.Enabled = false;
 
-            string validatePhrase = textBoxPhrase.Text.ToUpper();
+            string validatePhrase = textBoxPhrase.Text;
             for (int i = 0; i < validatePhrase.Length; i++)
             {
-                if (validatePhrase[i] != 32 && ((validatePhrase[i] < 65) || (validatePhrase[i] > 90)))
+                if (validatePhrase[i] != 32)
+
                 {
-                    _ = MessageBox.Show("The phrase can only contain characters A - Z. Please remove any special characters and try again.");
-                    _ = textBoxPhrase.Focus();
-                    runTime.Reset();
-                    return;
+                    if ((validatePhrase[i] < 65) || (validatePhrase[i] > 90))
+                    {
+                        if ((validatePhrase[i] < 97) || (validatePhrase[i] > 122))
+                        {
+                            _ = MessageBox.Show("The phrase can only contain characters A - Z, a - z, and <space>. Please remove any special characters and try again.");
+                            _ = textBoxPhrase.Focus();
+                            runTime.Reset();
+                            return;
+                        }
+                    }
                 }
             }
 
@@ -90,8 +97,7 @@ namespace WeaselProgram
                 char[] newString = new char[weaselPhrase.Length];
                 for (int currentLetter = 0; currentLetter < weaselPhrase.Length; currentLetter++)
                 {
-                    int newChar = random.Next(64, 91);
-                    if (newChar == 64) { newChar = 32; }
+                    char newChar = GetValidChar();
                     newString[currentLetter] = (char)newChar;
                 }
 
@@ -140,12 +146,34 @@ namespace WeaselProgram
                 {
                     if (random.Next(100) < 5)
                     {
-                        int newChar = random.Next(64, 91);
-                        if (newChar == 64) { newChar = 32; }
-                        currentPhrase.CharArray[currentLetter] = (char)newChar;
+                        char newChar = GetValidChar();
+                        currentPhrase.CharArray[currentLetter] = newChar;
                     }
                 }
             }
+        }
+
+        private char GetValidChar()
+        {
+            bool done;
+            int newChar;
+
+            Random random = new();
+
+            do
+            {
+                newChar = random.Next(64, 122);
+                if (newChar == 64)
+                {
+                    newChar = 32;
+                    done = true;
+                }
+
+                done = newChar <= 90 || newChar >= 97;
+
+            } while (!done);
+
+            return (char)newChar;
         }
     }
 
@@ -175,7 +203,7 @@ namespace WeaselProgram
 
         public override string ToString()
         {
-            return new string ( (new string(charArray))+" | "+ Score);
+            return new string((new string(charArray)) + " | " + Score);
         }
     }
 }
