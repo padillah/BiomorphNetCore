@@ -13,6 +13,8 @@ namespace WeaselProgram
     {
         Stopwatch runTime;
         BackgroundWorker phraseWorker;
+        string weaselPhrase;
+        int changePercentage;
 
         public Form1()
         {
@@ -24,6 +26,9 @@ namespace WeaselProgram
             phraseWorker.ProgressChanged += PhraseWorker_ProgressChanged;
             phraseWorker.DoWork += PhraseWorker_DoWork;
             phraseWorker.RunWorkerCompleted += PhraseWorker_RunWorkerCompleted;
+
+            runTime = new Stopwatch();
+            weaselPhrase = string.Empty;
         }
 
         private void buttonStart_Click(object sender, EventArgs e)
@@ -40,6 +45,8 @@ namespace WeaselProgram
 
             textBoxPhrase.Enabled = false;
             buttonStart.Enabled = false;
+            numericUpDownChangePercentage.Enabled = false;
+
             buttonStop.Enabled = true;
 
             string validatePhrase = textBoxPhrase.Text;
@@ -62,9 +69,12 @@ namespace WeaselProgram
 
             if (phraseWorker.IsBusy != true)
             {
+                progressBar1.Value = 0;
                 labelRunTime.Text = String.Empty;
                 labelGuessCount.Text = String.Empty;
 
+                changePercentage = (int)numericUpDownChangePercentage.Value;
+                weaselPhrase = validatePhrase;
                 phraseWorker.RunWorkerAsync(validatePhrase);
             }
         }
@@ -77,9 +87,9 @@ namespace WeaselProgram
                 return;
             }
 
-            string? weaselPhrase = e.Argument?.ToString();
+            string? findPhrase = e.Argument?.ToString();
 
-            if (string.IsNullOrWhiteSpace(weaselPhrase))
+            if (string.IsNullOrWhiteSpace(findPhrase))
             {
                 e.Cancel = true;
                 return;
@@ -87,7 +97,7 @@ namespace WeaselProgram
             else
             {
                 runTime = Stopwatch.StartNew();
-                if (!FindPhrase(weaselPhrase, worker))
+                if (!FindPhrase(findPhrase, worker))
                 {
                     e.Cancel = true;
                     return;
@@ -97,15 +107,23 @@ namespace WeaselProgram
 
         private void PhraseWorker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
-            string? nextGuess = e.UserState as string;
-            if (string.IsNullOrWhiteSpace(nextGuess))
+            if (e.UserState is not Phrase nextGuess)
+            {
+                phraseWorker.CancelAsync();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(nextGuess.PhraseString))
             {
                 return;
             }
 
             // Add the match to the listBox
             _ = listBoxResults.Items.Add(nextGuess);
-            if(listBoxResults.Items.Count > 50000 )
+
+            progressBar1.Value = (nextGuess.Score / weaselPhrase.Length) * 100;
+
+            if (listBoxResults.Items.Count > 50000)
             {
                 phraseWorker.CancelAsync();
             }
@@ -141,6 +159,7 @@ namespace WeaselProgram
 
             textBoxPhrase.Enabled = true;
             buttonStart.Enabled = true;
+            numericUpDownChangePercentage.Enabled = true;
             buttonStop.Enabled = false;
 
             runTime.Reset();
@@ -169,7 +188,7 @@ namespace WeaselProgram
 
                 // Add the match to the listBox
                 //listBoxResults.Items.Add(nextGuess.ToString());
-                worker.ReportProgress(0, nextGuess.ToString());
+                worker.ReportProgress(0, nextGuess);
 
                 attemptPhrases.Clear();
 
@@ -236,14 +255,16 @@ namespace WeaselProgram
             char newChar;
             Random random = new();
 
-            foreach (var currentPhrase in attemptPhrases)
+            for (int offset = 1; offset < attemptPhrases.Count; offset++)
             {
+                Phrase? currentPhrase = attemptPhrases[offset];
+
                 //Reset the score
                 currentPhrase.Score = 0;
 
                 for (int currentLetter = 0; currentLetter < currentPhrase.PhraseString.Length; currentLetter++)
                 {
-                    if (random.Next(100) < 5)
+                    if (random.Next(100) < changePercentage)
                     {
                         progress = false;
                         do
@@ -277,7 +298,7 @@ namespace WeaselProgram
 
             do
             {
-                newChar = random.Next(64, 122);
+                newChar = random.Next(64, 123);
                 if (newChar == 64)
                 {
                     newChar = 32;
