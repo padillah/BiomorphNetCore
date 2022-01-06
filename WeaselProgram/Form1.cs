@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -10,14 +11,23 @@ namespace WeaselProgram
 {
     public partial class Form1 : Form
     {
+        Stopwatch runTime;
+        BackgroundWorker phraseWorker;
+
         public Form1()
         {
             InitializeComponent();
+
+            phraseWorker = new BackgroundWorker();
+            phraseWorker.WorkerSupportsCancellation = true;
+            phraseWorker.WorkerReportsProgress = true;
+            phraseWorker.ProgressChanged += PhraseWorker_ProgressChanged;
+            phraseWorker.DoWork += PhraseWorker_DoWork;
+            phraseWorker.RunWorkerCompleted += PhraseWorker_RunWorkerCompleted;
         }
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            Stopwatch runTime;
 
             if (string.IsNullOrEmpty(textBoxPhrase.Text))
             {
@@ -28,7 +38,6 @@ namespace WeaselProgram
 
             listBoxResults.Items.Clear();
 
-            runTime = Stopwatch.StartNew();
             textBoxPhrase.Enabled = false;
             buttonStart.Enabled = false;
 
@@ -44,21 +53,85 @@ namespace WeaselProgram
                         {
                             _ = MessageBox.Show("The phrase can only contain characters A - Z, a - z, and <space>. Please remove any special characters and try again.");
                             _ = textBoxPhrase.Focus();
-                            runTime.Reset();
                             return;
                         }
                     }
                 }
             }
 
-            FindPhrase(validatePhrase);
-            runTime.Stop();
-            labelRunTime.Text = runTime.Elapsed.ToString();
+            if (phraseWorker.IsBusy != true)
+            {
+                phraseWorker.RunWorkerAsync(validatePhrase);
+            }
+
             textBoxPhrase.Enabled = true;
             buttonStart.Enabled = true;
         }
 
-        private void FindPhrase(string weaselPhrase)
+        private void PhraseWorker_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            if (sender is not BackgroundWorker worker)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            string? weaselPhrase = e.Argument?.ToString();
+
+            if (string.IsNullOrWhiteSpace(weaselPhrase))
+            {
+                e.Cancel = true;
+                return;
+            }
+            else
+            {
+                runTime = Stopwatch.StartNew();
+                FindPhrase(weaselPhrase, worker);
+            }
+        }
+
+        private void PhraseWorker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        {
+            string? nextGuess = e.UserState as string;
+            if (string.IsNullOrWhiteSpace(nextGuess))
+            {
+                return;
+            }
+
+            // Add the match to the listBox
+            _ = listBoxResults.Items.Add(nextGuess);
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            if (phraseWorker.WorkerSupportsCancellation == true)
+            {
+                // Cancel the asynchronous operation.
+                phraseWorker.CancelAsync();
+            }
+        }
+
+        private void PhraseWorker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            runTime.Stop();
+
+            if (e.Cancelled == true)
+            {
+                labelRunTime.Text = "Canceled!";
+            }
+            else if (e.Error != null)
+            {
+                labelRunTime.Text = "Error: Something went wrong";
+            }
+            else
+            {
+                labelRunTime.Text = runTime.Elapsed.ToString();
+            }
+
+            runTime.Reset();
+        }
+
+        private void FindPhrase(string weaselPhrase, BackgroundWorker worker)
         {
             Phrase nextGuess;
             List<Phrase> attemptPhrases = new();
@@ -75,7 +148,8 @@ namespace WeaselProgram
                 nextGuess = FuzzyMatch(attemptPhrases, weaselPhrase);
 
                 // Add the match to the listBox
-                listBoxResults.Items.Add(nextGuess.ToString());
+                //listBoxResults.Items.Add(nextGuess.ToString());
+                worker.ReportProgress(0, nextGuess.ToString());
 
                 attemptPhrases.Clear();
 
@@ -190,7 +264,7 @@ namespace WeaselProgram
                 }
                 else
                 {
-                done = newChar <= 90 || newChar >= 97;
+                    done = newChar <= 90 || newChar >= 97;
                 }
 
             } while (!done);
@@ -201,7 +275,7 @@ namespace WeaselProgram
         private void toolStripMenuItemCopy_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(listBoxResults.SelectedItem.ToString());
-    }
+        }
     }
 
     internal class Phrase
