@@ -32,17 +32,17 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxPhrase = new System.Windows.Forms.TextBox();
-            this.buttonStart = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.labelRunTime = new System.Windows.Forms.Label();
-            this.checkBoxNoDupes = new System.Windows.Forms.CheckBox();
             this.buttonStop = new System.Windows.Forms.Button();
+            this.buttonStart = new System.Windows.Forms.Button();
+            this.checkBoxNoDupes = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.labelGuessCount = new System.Windows.Forms.Label();
             this.listBoxResults = new System.Windows.Forms.ListBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.label3 = new System.Windows.Forms.Label();
-            this.labelGuessCount = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -103,16 +103,6 @@
             this.textBoxPhrase.Size = new System.Drawing.Size(217, 23);
             this.textBoxPhrase.TabIndex = 1;
             // 
-            // buttonStart
-            // 
-            this.buttonStart.Location = new System.Drawing.Point(89, 67);
-            this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(75, 23);
-            this.buttonStart.TabIndex = 3;
-            this.buttonStart.Text = "Start";
-            this.buttonStart.UseVisualStyleBackColor = true;
-            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -135,6 +125,27 @@
             this.labelRunTime.Text = "0:00:00.0000";
             this.labelRunTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // buttonStop
+            // 
+            this.buttonStop.Enabled = false;
+            this.buttonStop.Location = new System.Drawing.Point(89, 101);
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.Size = new System.Drawing.Size(75, 23);
+            this.buttonStop.TabIndex = 7;
+            this.buttonStop.Text = "Stop";
+            this.buttonStop.UseVisualStyleBackColor = true;
+            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Location = new System.Drawing.Point(89, 67);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(75, 23);
+            this.buttonStart.TabIndex = 3;
+            this.buttonStart.Text = "Start";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
+            // 
             // checkBoxNoDupes
             // 
             this.checkBoxNoDupes.AutoSize = true;
@@ -145,15 +156,27 @@
             this.checkBoxNoDupes.Text = "Do not allow duplicate guesses";
             this.checkBoxNoDupes.UseVisualStyleBackColor = true;
             // 
-            // buttonStop
+            // label3
             // 
-            this.buttonStop.Location = new System.Drawing.Point(89, 101);
-            this.buttonStop.Name = "buttonStop";
-            this.buttonStop.Size = new System.Drawing.Size(75, 23);
-            this.buttonStop.TabIndex = 7;
-            this.buttonStop.Text = "Stop";
-            this.buttonStop.UseVisualStyleBackColor = true;
-            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Location = new System.Drawing.Point(3, 152);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(80, 15);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Guess count:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelGuessCount
+            // 
+            this.labelGuessCount.AutoSize = true;
+            this.labelGuessCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelGuessCount.Location = new System.Drawing.Point(89, 152);
+            this.labelGuessCount.Name = "labelGuessCount";
+            this.labelGuessCount.Size = new System.Drawing.Size(217, 15);
+            this.labelGuessCount.TabIndex = 9;
+            this.labelGuessCount.Text = "0";
+            this.labelGuessCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // listBoxResults
             // 
@@ -201,28 +224,6 @@
             this.splitContainer1.SplitterDistance = 309;
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 152);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 15);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Guess count:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // labelGuessCount
-            // 
-            this.labelGuessCount.AutoSize = true;
-            this.labelGuessCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelGuessCount.Location = new System.Drawing.Point(89, 152);
-            this.labelGuessCount.Name = "labelGuessCount";
-            this.labelGuessCount.Size = new System.Drawing.Size(217, 15);
-            this.labelGuessCount.TabIndex = 9;
-            this.labelGuessCount.Text = "0";
-            this.labelGuessCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Form1
             // 

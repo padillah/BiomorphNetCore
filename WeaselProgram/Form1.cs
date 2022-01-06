@@ -40,6 +40,7 @@ namespace WeaselProgram
 
             textBoxPhrase.Enabled = false;
             buttonStart.Enabled = false;
+            buttonStop.Enabled = true;
 
             string validatePhrase = textBoxPhrase.Text;
             for (int i = 0; i < validatePhrase.Length; i++)
@@ -61,11 +62,11 @@ namespace WeaselProgram
 
             if (phraseWorker.IsBusy != true)
             {
+                labelRunTime.Text = String.Empty;
+                labelGuessCount.Text = String.Empty;
+
                 phraseWorker.RunWorkerAsync(validatePhrase);
             }
-
-            textBoxPhrase.Enabled = true;
-            buttonStart.Enabled = true;
         }
 
         private void PhraseWorker_DoWork(object? sender, DoWorkEventArgs e)
@@ -86,7 +87,11 @@ namespace WeaselProgram
             else
             {
                 runTime = Stopwatch.StartNew();
-                FindPhrase(weaselPhrase, worker);
+                if (!FindPhrase(weaselPhrase, worker))
+                {
+                    e.Cancel = true;
+                    return;
+                }
             }
         }
 
@@ -100,6 +105,10 @@ namespace WeaselProgram
 
             // Add the match to the listBox
             _ = listBoxResults.Items.Add(nextGuess);
+            if(listBoxResults.Items.Count > 50000 )
+            {
+                phraseWorker.CancelAsync();
+            }
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
@@ -128,10 +137,16 @@ namespace WeaselProgram
                 labelRunTime.Text = runTime.Elapsed.ToString();
             }
 
+            labelGuessCount.Text = listBoxResults.Items.Count.ToString();
+
+            textBoxPhrase.Enabled = true;
+            buttonStart.Enabled = true;
+            buttonStop.Enabled = false;
+
             runTime.Reset();
         }
 
-        private void FindPhrase(string weaselPhrase, BackgroundWorker worker)
+        private bool FindPhrase(string weaselPhrase, BackgroundWorker worker)
         {
             Phrase nextGuess;
             List<Phrase> attemptPhrases = new();
@@ -141,6 +156,11 @@ namespace WeaselProgram
 
             do
             {
+                if (worker.CancellationPending == true)
+                {
+                    return false;
+                }
+
                 // Mutate the list of strings
                 MutatePhraseList(attemptPhrases);
 
@@ -161,6 +181,7 @@ namespace WeaselProgram
 
             } while (nextGuess.PhraseString != weaselPhrase);
 
+            return true;
         }
 
         private List<Phrase> NewPhrasePopulation(string weaselPhrase)
